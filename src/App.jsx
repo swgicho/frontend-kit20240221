@@ -1,24 +1,38 @@
 import { Routes, Route } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+//import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import TravelList from './pages/TravelList.jsx'
 import TravelDetail from './pages/TravelDetail.jsx'
-import {getSongList} from './api/travelApi.js'
+import {getTravelList} from './api/travelApi.js'
 
 function App() {
-  const [travels, setTravels] = useState([])
+  // const [travels, setTravels] = useState([])
 
-  useEffect(() => {
-    const fetchTravels = async () => {
-      try {
-        const data = await getTravelList()
-        setTravels(data)
-      } catch (err) {
-        console.error("Failed to fetch travels:", err)
-      }
-    }
+  // useEffect(() => {
+  //   const fetchTravels = async () => {
+  //     try {
+  //       const data = await getTravelList()
+  //       setTravels(data)
+  //     } catch (err) {
+  //       console.error("Failed to fetch travels:", err)
+  //     }
+  //   }
 
-    fetchTravels()
-  }, [])
+  //   fetchTravels()
+  // }, [])
+
+  const { data: travels, isLoading, isError, error } = useQuery({
+    queryKey: ['travels'],
+    queryFn: getTravelList
+  })
+
+  if (isLoading) {
+    return <p className="text-center mt-10">Loading...</p>
+  }
+
+  if (isError) {
+    return <p className="text-center mt-10">오류 발생: {error.message}</p>
+  }
 
   return (
     <Routes>

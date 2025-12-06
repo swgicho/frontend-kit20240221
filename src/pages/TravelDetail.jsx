@@ -1,12 +1,24 @@
 import { useParams, Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { getTravelDetail } from '../api/travelApi.js'
 
-const TravelDetail = ({ travels }) => {
+const TravelDetail = () => {
   const { id } = useParams()
-  const travel = travels.find(t => t.id === id)
+  
+  const { data: travel, isLoading, isError, error } = useQuery({
+    queryKey: ['travel', id],
+    queryFn: () => getTravelDetail(id),
+    enabled: !!id,
+  })
 
-  if (!travel)
-    return <div className="p-10 text-center text-gray-500">해당 정보를 찾을 수 없습니다.</div>
+  if (isLoading) {
+    return <p className="text-center mt-10">Loading...</p>
+  }
 
+  if (isError) {
+    return <p className="text-center mt-10">오류 발생: {error.message}</p>
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50 p-6 flex justify-center">
       <div className="bg-white p-6 rounded-3xl shadow-xl max-w-2xl w-full border border-gray-100 min-h-[750px]">
