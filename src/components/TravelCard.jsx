@@ -7,7 +7,7 @@ export default function TravelCard({ travel }) {
       items-center hover:scale-105 transition-transform">
       <img 
         src={`https://picsum.photos/100/100?random=${travel.id}`} 
-        alt={`${travel.country} 앨범 이미지`}
+        alt={`${travel.country} 이미지`}
         className="w-32 h-32 mb-2" 
       />
       <div className="text-lg font-bold">{travel.country}</div>
